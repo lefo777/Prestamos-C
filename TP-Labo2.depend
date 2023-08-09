@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1686947434 source:c:\users\silvia marisa\desktop\facultad\prog\prog 2\a. tp\tp-labo2\funciones.c
+
+1687278690 source:c:\users\silvia marisa\desktop\facultad\prog\prog 2\a. tp\tp-labo2\main.c
+	"funciones.h"
+
+1687299295 c:\users\silvia marisa\desktop\facultad\prog\prog 2\a. tp\tp-labo2\funciones.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<unistd.h>
+	<ctype.h>
+	<stdbool.h>
+	<time.h>
+

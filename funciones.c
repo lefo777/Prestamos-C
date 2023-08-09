@@ -12,18 +12,19 @@
 #include <stdbool.h>
 #include <time.h>
 
-#define max_num_clientes 100 //para modificar la cantidad de clientes totales que se guarden y puedan pedir prestamos
+#define max_num_clientes 100 // para modificar la cantidad de clientes totales que se guarden y puedan pedir prestamos
 #define max_nombre 10
 #define max_apellido 10
 
-struct clientes {
+struct clientes
+{
     int orden;
-    char nombre [max_nombre];
-    char apellido [max_apellido];
+    char nombre[max_nombre];
+    char apellido[max_apellido];
     float importe;
-    char tipo_credito [20];
+    char tipo_credito[20];
     int dia;
-    char mes [4];
+    char mes[4];
     int anio;
     int numero_cuotas;
     float importe_cuota;
@@ -34,130 +35,147 @@ struct clientes {
 
 // Emite los mensajes de los errores controlados.
 
-void controlar_error(const char* mensaje) {
+void controlar_error(const char *mensaje)
+{
     printf("\n");
     printf("Error: %s\n", mensaje);
 }
 
 // Emite error si no se ingresa un numero
 
-void validar_ingreso_entero(int * numero) {
+void validar_ingreso_entero(int *numero)
+{
 
     char buffer[100];
     fgets(buffer, sizeof(buffer), stdin);
 
-    if (sscanf(buffer, "%d", numero) != 1) {
+    if (sscanf(buffer, "%d", numero) != 1)
+    {
 
         controlar_error("Numero incorrecto.\n");
         validar_ingreso_entero(numero);
-
     }
 }
 
 // Emite error si hay problema con el float ingresado.
 
-float validar_ingreso_float() {
+float validar_ingreso_float()
+{
     char entrada[100];
     float numero;
 
-    while (1) {
+    while (1)
+    {
         fgets(entrada, sizeof(entrada), stdin);
 
         // Intentar convertir la entrada a un n�mero float
-        if (sscanf(entrada, "%f", &numero) == 1) {
+        if (sscanf(entrada, "%f", &numero) == 1)
+        {
             return numero;
-        } else {
+        }
+        else
+        {
             controlar_error("Valor inv�lido. Ingrese un n�mero float v�lido: ");
         }
     }
 }
 
-//Comprueba que la fecha sea correcta.
+// Comprueba que la fecha sea correcta.
 
-int validar_fecha(int dia, int mes, int anio) {
+int validar_fecha(int dia, int mes, int anio)
+{
     // Verificar rango de d�as
-    if (dia < 1 || dia > 31) {
-        return 0;  // D�a inv�lido
+    if (dia < 1 || dia > 31)
+    {
+        return 0; // D�a inv�lido
     }
 
     // Verificar rango de meses
-    if (mes < 1 || mes > 12) {
-        return 0;  // Mes inv�lido
+    if (mes < 1 || mes > 12)
+    {
+        return 0; // Mes inv�lido
     }
 
     // Verificar rango de a�os
     time_t tiempo_actual = time(NULL);
-    struct tm* fecha_actual = localtime(&tiempo_actual);
-    int anio_actual = fecha_actual->tm_year + 1900;  // A�o actual
+    struct tm *fecha_actual = localtime(&tiempo_actual);
+    int anio_actual = fecha_actual->tm_year + 1900; // A�o actual
 
-    if (anio < anio_actual) {
-        return 0;  // A�o inv�lido (menor al actual)
+    if (anio < anio_actual)
+    {
+        return 0; // A�o inv�lido (menor al actual)
     }
 
     // Verificar si es febrero y el d�a no excede los 29 d�as en a�os bisiestos
-    if (mes == 2) {
+    if (mes == 2)
+    {
         int es_bisiesto = (anio % 4 == 0 && anio % 100 != 0) || (anio % 400 == 0);
-        if (dia > 29 || (dia == 29 && !es_bisiesto)) {
-            return 0;  // D�a inv�lido para febrero
+        if (dia > 29 || (dia == 29 && !es_bisiesto))
+        {
+            return 0; // D�a inv�lido para febrero
         }
     }
 
     // Verificar d�as en meses que tienen 30 d�as
-    if ((mes == 4 || mes == 6 || mes == 9 || mes == 11) && dia > 30) {
-        return 0;  // D�a inv�lido para meses con 30 d�as
+    if ((mes == 4 || mes == 6 || mes == 9 || mes == 11) && dia > 30)
+    {
+        return 0; // D�a inv�lido para meses con 30 d�as
     }
 
-    return 1;  // Fecha v�lida
+    return 1; // Fecha v�lida
 }
 
 // Cambio el numero de mes por los primeros 3 char del mes correspondiente
 
-void cambio_formato_mes (int mes, char * nombre_mes){
-    switch (mes) {
-        case 1:
-            strcpy(nombre_mes, "ene");
-            break;
-        case 2:
-            strcpy(nombre_mes, "feb");
-            break;
-        case 3:
-            strcpy(nombre_mes, "mar");
-            break;
-        case 4:
-            strcpy(nombre_mes, "abr");
-            break;
-        case 5:
-            strcpy(nombre_mes, "may");
-            break;
-        case 6:
-            strcpy(nombre_mes, "jun");
-            break;
-        case 7:
-            strcpy(nombre_mes, "jul");
-            break;
-        case 8:
-            strcpy(nombre_mes, "ago");
-            break;
-        case 9:
-            strcpy(nombre_mes, "sep");
-            break;
-        case 10:
-            strcpy(nombre_mes, "oct");
-            break;
-        case 11:
-            strcpy(nombre_mes, "nov");
-            break;
-        case 12:
-            strcpy(nombre_mes, "dic");
-            break;
-        default:
-            return 0;  // Mes inv�lido
+void cambio_formato_mes(int mes, char *nombre_mes)
+{
+    switch (mes)
+    {
+    case 1:
+        strcpy(nombre_mes, "ene");
+        break;
+    case 2:
+        strcpy(nombre_mes, "feb");
+        break;
+    case 3:
+        strcpy(nombre_mes, "mar");
+        break;
+    case 4:
+        strcpy(nombre_mes, "abr");
+        break;
+    case 5:
+        strcpy(nombre_mes, "may");
+        break;
+    case 6:
+        strcpy(nombre_mes, "jun");
+        break;
+    case 7:
+        strcpy(nombre_mes, "jul");
+        break;
+    case 8:
+        strcpy(nombre_mes, "ago");
+        break;
+    case 9:
+        strcpy(nombre_mes, "sep");
+        break;
+    case 10:
+        strcpy(nombre_mes, "oct");
+        break;
+    case 11:
+        strcpy(nombre_mes, "nov");
+        break;
+    case 12:
+        strcpy(nombre_mes, "dic");
+        break;
+    default:
+        break; // Mes invalido
     }
 }
 
 // obtengo el numero de mes de acuerdo al nombre del mes
 
-int numero_mes(const char* nombre_mes) {
+int numero_mes(const char *nombre_mes)
+{
 
     if (strcmp(nombre_mes, "ene") == 0)
         return 1;
@@ -189,9 +207,11 @@ int numero_mes(const char* nombre_mes) {
 
 // Como indica el nombre, separa el nombre del cliente en apellido y nombre.
 
-char* separar_nombre_apellido(const char* nombre_completo, char* nombre, char* apellido) {
-    const char* espacio = strchr(nombre_completo, ' ');
-    if (espacio != NULL) {
+char *separar_nombre_apellido(const char *nombre_completo, char *nombre, char *apellido)
+{
+    const char *espacio = strchr(nombre_completo, ' ');
+    if (espacio != NULL)
+    {
         // Copiar el nombre hasta el espacio
         strncpy(nombre, nombre_completo, espacio - nombre_completo);
         nombre[espacio - nombre_completo] = '\0'; // Asegurarse de agregar el terminador nulo
@@ -206,25 +226,28 @@ char* separar_nombre_apellido(const char* nombre_completo, char* nombre, char* a
 
 // Recibe un puntero al archivo prestamos.csv y un puntero a struct. Copia el contenido del archivo al struct.
 
-void copiar_archivo_prestamo(FILE* archivo, struct clientes* ejem) {
+void copiar_archivo_prestamo(FILE *archivo, struct clientes *ejem)
+{
 
     char linea[100];
     int dia, mes, anio;
-    char nombre_mes [4] = "CAS";
+    char nombre_mes[4] = "CAS";
     int j = 0; // contador para recorrer el archivo y no excederse al copiar datos
 
-    //ignoro la primer linea del archivo prestamos.csv dado que hice mi propio encabezado
+    // ignoro la primer linea del archivo prestamos.csv dado que hice mi propio encabezado
     fgets(linea, sizeof(linea), archivo);
 
-    while (fgets(linea, sizeof(linea), archivo)) {
+    while (fgets(linea, sizeof(linea), archivo))
+    {
 
-        if (j < max_num_clientes) {
+        if (j < max_num_clientes)
+        {
 
-            char* token = strtok(linea, ";"); // Carga el campo orden
+            char *token = strtok(linea, ";"); // Carga el campo orden
             sscanf(token, "%d", &ejem[j].orden);
 
             token = strtok(NULL, ";"); // Pasa al siguente campo, cliente
-            char* nombre_completo = token;
+            char *nombre_completo = token;
 
             // Funci�n para separar nombre y apellido
             char nombre[max_nombre];
@@ -239,8 +262,10 @@ void copiar_archivo_prestamo(FILE* archivo, struct clientes* ejem) {
             ejem[j].apellido[sizeof(ejem[j].apellido) - 1] = '\0';
 
             // Pasa el apellido a mayusculas.
-            for (int i = 0; ejem[j].apellido[i] != '\0'; i++) {
-                if (ejem[j].apellido[i] != ' ') {
+            for (int i = 0; ejem[j].apellido[i] != '\0'; i++)
+            {
+                if (ejem[j].apellido[i] != ' ')
+                {
                     ejem[j].apellido[i] = toupper(ejem[j].apellido[i]);
                 }
             }
@@ -253,22 +278,23 @@ void copiar_archivo_prestamo(FILE* archivo, struct clientes* ejem) {
             ejem[j].tipo_credito[sizeof(ejem[j].tipo_credito) - 1] = '\0'; // Asegurarse de agregar el terminador nulo
 
             // Convertir el tipo_credito a mayusculas
-            for (int i = 0; ejem[j].tipo_credito[i] != '\0'; i++) {
+            for (int i = 0; ejem[j].tipo_credito[i] != '\0'; i++)
+            {
                 ejem[j].tipo_credito[i] = toupper(ejem[j].tipo_credito[i]);
             }
 
-            token = strtok(NULL, ";");  // Obtener el siguiente campo
+            token = strtok(NULL, ";"); // Obtener el siguiente campo
             sscanf(token, "%d", &dia);
 
-            token = strtok(NULL, ";");  // Obtener el siguiente campo
+            token = strtok(NULL, ";"); // Obtener el siguiente campo
             sscanf(token, "%d", &mes);
 
-            token = strtok(NULL, ";");  // Obtener el siguiente campo
+            token = strtok(NULL, ";"); // Obtener el siguiente campo
             sscanf(token, "%d", &anio);
 
             validar_fecha(dia, mes, anio);
 
-            cambio_formato_mes (mes, nombre_mes);
+            cambio_formato_mes(mes, nombre_mes);
 
             ejem[j].dia = dia;
             strncpy(ejem[j].mes, nombre_mes, sizeof(ejem[j].mes) - 1);
@@ -286,8 +312,9 @@ void copiar_archivo_prestamo(FILE* archivo, struct clientes* ejem) {
 
             token = strtok(NULL, ";"); // Obtener el siguiente campo
             sscanf(token, "%f", &ejem[j].total_cuota);
-
-        } else {
+        }
+        else
+        {
 
             break; // Sale del ciclo si se cargan todos los datos
         }
@@ -296,7 +323,8 @@ void copiar_archivo_prestamo(FILE* archivo, struct clientes* ejem) {
     }
 
     // Rellenar con ceros a partir de la posici�n j
-    for (; j < max_num_clientes; j++) {
+    for (; j < max_num_clientes; j++)
+    {
         ejem[j].orden = 0;
         ejem[j].nombre[0] = '\0';
         ejem[j].apellido[0] = '\0';
@@ -315,18 +343,22 @@ void copiar_archivo_prestamo(FILE* archivo, struct clientes* ejem) {
 
 // Recibe un puntero al archivo binario y lo pasa al struct cuyo puntero tambien recibe.
 
-void copiar_datos_binario(FILE* archivo_binario, struct clientes* ejem) {
+void copiar_datos_binario(FILE *archivo_binario, struct clientes *ejem)
+{
 
     int i;
-    for (i = 0; i < max_num_clientes; i++) {
-        if (fread(&ejem[i], sizeof(struct clientes), 1, archivo_binario) != 1) {
-            // Se encontr� el final del archivo o hubo un error de lectura
+    for (i = 0; i < max_num_clientes; i++)
+    {
+        if (fread(&ejem[i], sizeof(struct clientes), 1, archivo_binario) != 1)
+        {
+            // Se encontro el final del archivo o hubo un error de lectura
             break;
         }
     }
 
     // Rellenar los elementos no utilizados con valores nulos
-    for (; i < max_num_clientes; i++) {
+    for (; i < max_num_clientes; i++)
+    {
         ejem[i].orden = 0;
         ejem[i].nombre[0] = '\0';
         ejem[i].apellido[0] = '\0';
@@ -346,34 +378,40 @@ void copiar_datos_binario(FILE* archivo_binario, struct clientes* ejem) {
 // Opcion 1 del menu:
 // Muestra la lista de clientes que se encuentra en prestamos.csv
 
-void listar_clientes() {
+void listar_clientes()
+{
 
     struct clientes ejem[max_num_clientes];
     int j;
 
-    FILE* archivo_prestamo = fopen("prestamos.csv", "r");
+    FILE *archivo_prestamo = fopen("prestamos.csv", "r");
 
     printf("****************************************************************************************************************************************\n");
     printf("| Orden |        Cliente        |  Importe  | Tipo de credito | Dia/  Mes  / Anio | Cuotas | Importe Cuota |   IVA  |   Total Cuota   |\n");
     printf("****************************************************************************************************************************************\n");
 
-    if (archivo_prestamo != NULL) {
+    if (archivo_prestamo != NULL)
+    {
 
         copiar_archivo_prestamo(archivo_prestamo, ejem);
 
-        for (j = 0; j < max_num_clientes; j++) {
+        for (j = 0; j < max_num_clientes; j++)
+        {
 
-            if (ejem[j].orden != 0){
+            if (ejem[j].orden != 0)
+            {
 
                 printf("|  %03d  | %10s %10s | %9.2f | %15s | %02d /  %3s  / %4d | %6d | %13.2f | %06.2f | %15.2f |\n",
-                    ejem[j].orden, ejem[j].nombre, ejem[j].apellido, ejem[j].importe, ejem[j].tipo_credito,
-                    ejem[j].dia, ejem[j].mes, ejem[j].anio, ejem[j].numero_cuotas, ejem[j].importe_cuota,
-                    ejem[j].iva, ejem[j].total_cuota);
+                       ejem[j].orden, ejem[j].nombre, ejem[j].apellido, ejem[j].importe, ejem[j].tipo_credito,
+                       ejem[j].dia, ejem[j].mes, ejem[j].anio, ejem[j].numero_cuotas, ejem[j].importe_cuota,
+                       ejem[j].iva, ejem[j].total_cuota);
             }
         }
 
         fclose(archivo_prestamo);
-    } else {
+    }
+    else
+    {
         controlar_error("No se pudo abrir el archivo prestamos.csv");
         perror("fopen");
     }
@@ -382,20 +420,23 @@ void listar_clientes() {
 // Opcion 2 del menu:
 // Creo un archivo binario con los datos que tiene prestamos.csv
 
-void crear_binario() {
+void crear_binario()
+{
 
     int var_fwrite = max_num_clientes;
 
     // Verificar si ya existe el archivo creditos.dat
-    if (access("creditos.dat", F_OK) == 0) {
+    if (access("creditos.dat", F_OK) == 0)
+    {
         controlar_error("El archivo creditos.dat ya existe en la carpeta.\n");
         return;
     }
 
     struct clientes ejem[max_num_clientes];
 
-    FILE* archivo_prestamo = fopen("prestamos.csv", "r");
-    if (archivo_prestamo == NULL) {
+    FILE *archivo_prestamo = fopen("prestamos.csv", "r");
+    if (archivo_prestamo == NULL)
+    {
         controlar_error("No se pudo abrir el archivo prestamos.csv\n");
         perror("fopen");
         return;
@@ -405,8 +446,9 @@ void crear_binario() {
 
     fclose(archivo_prestamo);
 
-    FILE* archivo_binario = fopen("creditos.dat", "wb");
-    if (archivo_binario == NULL) {
+    FILE *archivo_binario = fopen("creditos.dat", "wb");
+    if (archivo_binario == NULL)
+    {
         controlar_error("No se pudo crear el archivo creditos.dat\n");
         perror("fopen");
         return;
@@ -426,12 +468,14 @@ void crear_binario() {
 // Opcion 3 del menu:
 // Copia los datos del archivo prestamos.csv al archivo binario
 
-void migrar_datos() {
+void migrar_datos()
+{
 
     struct clientes ejem[max_num_clientes];
 
-    FILE* archivo_csv = fopen("prestamos.csv", "r");
-    if (archivo_csv == NULL) {
+    FILE *archivo_csv = fopen("prestamos.csv", "r");
+    if (archivo_csv == NULL)
+    {
         controlar_error("No se pudo abrir el archivo prestamos.csv");
         perror("fopen");
         return;
@@ -441,13 +485,18 @@ void migrar_datos() {
 
     fclose(archivo_csv);
 
-    for (int j = 0; j < max_num_clientes; j++) {
+    for (int j = 0; j < max_num_clientes; j++)
+    {
 
-        if (ejem[j].orden != 0) {  ejem[j].activo = 1;}
+        if (ejem[j].orden != 0)
+        {
+            ejem[j].activo = 1;
+        }
     }
 
-    FILE* archivo_binario = fopen("creditos.dat", "wb");
-    if (archivo_binario == NULL) {
+    FILE *archivo_binario = fopen("creditos.dat", "wb");
+    if (archivo_binario == NULL)
+    {
         controlar_error("No se encontro el archivo creditos.dat");
         perror("fopen");
         return;
@@ -463,22 +512,24 @@ void migrar_datos() {
 // Opcion 4 del menu:
 // Imprime los valores que tiene el archivo binario de acuerdo a lo seleccionado
 
-void listar_datos() {
+void listar_datos()
+{
 
     int min_dia, max_dia, min_mes, max_mes, min_anio, max_anio, opcion;
     int mes;
 
     struct clientes ejem[max_num_clientes];
 
-    FILE* archivo_binario = fopen("creditos.dat", "rb"); // Abrir en modo de lectura binaria
+    FILE *archivo_binario = fopen("creditos.dat", "rb"); // Abrir en modo de lectura binaria
 
-    if (archivo_binario == NULL) {
+    if (archivo_binario == NULL)
+    {
         printf("Error al abrir el archivo binario\n");
         perror("fopen");
         return;
     }
 
-    copiar_datos_binario (archivo_binario, ejem);
+    copiar_datos_binario(archivo_binario, ejem);
 
     fclose(archivo_binario);
 
@@ -492,148 +543,162 @@ void listar_datos() {
     validar_ingreso_entero(&opcion);
     printf("\n");
 
-    switch (opcion) {
+    switch (opcion)
+    {
+
+    case 1:
+        printf("****************************************************************************************************************************************************\n");
+        printf("| Orden |        Cliente        |  Importe  | Tipo de credito | Dia/  Mes  / Anio | Cuotas | Importe Cuota |  IVA   |   Total Cuota   | activo |\n");
+        printf("****************************************************************************************************************************************************\n");
+
+        for (int j = 0; j < max_num_clientes; j++)
+        {
+
+            printf("|  %03d  | %10s %10s | %9.2f | %15s | %02d /  %3s  / %4d | %6d | %13.2f | %06.2f | %15.2f | %5d  |\n",
+                   ejem[j].orden, ejem[j].nombre, ejem[j].apellido, ejem[j].importe, ejem[j].tipo_credito,
+                   ejem[j].dia, ejem[j].mes, ejem[j].anio, ejem[j].numero_cuotas, ejem[j].importe_cuota,
+                   ejem[j].iva, ejem[j].total_cuota, ejem[j].activo);
+        }
+        break;
+    case 2:
+
+        printf("****************************************************************************************************************************************************\n");
+        printf("| Orden |        Cliente        |  Importe  | Tipo de credito | Dia/  Mes  / Anio | Cuotas | Importe Cuota |  IVA   |   Total Cuota   | activo |\n");
+        printf("****************************************************************************************************************************************************\n");
+
+        for (int j = 0; j < max_num_clientes; j++)
+        {
+
+            if (ejem[j].activo == 1)
+            {
+                printf("|  %03d  | %10s %10s | %9.2f | %15s | %02d /  %3s  / %4d | %6d | %13.2f | %06.2f | %15.2f | %5d  |\n",
+                       ejem[j].orden, ejem[j].nombre, ejem[j].apellido, ejem[j].importe, ejem[j].tipo_credito,
+                       ejem[j].dia, ejem[j].mes, ejem[j].anio, ejem[j].numero_cuotas, ejem[j].importe_cuota,
+                       ejem[j].iva, ejem[j].total_cuota, ejem[j].activo);
+            }
+        }
+        break;
+    case 3:
+        printf("Seleccione el tipo de credito por el que quiere filtrar: \n");
+        printf("1 para mostrar clientes A Solo Firma: \n");
+        printf("2 para mostrar clientes Con Garantia: \n");
+        printf("Opcion: ");
+
+        validar_ingreso_entero(&opcion);
+        printf("\n");
+
+        switch (opcion)
+        {
 
         case 1:
+
             printf("****************************************************************************************************************************************************\n");
             printf("| Orden |        Cliente        |  Importe  | Tipo de credito | Dia/  Mes  / Anio | Cuotas | Importe Cuota |  IVA   |   Total Cuota   | activo |\n");
             printf("****************************************************************************************************************************************************\n");
 
-            for (int j = 0; j < max_num_clientes; j++) {
+            for (int j = 0; j < max_num_clientes; j++)
+            {
 
-                printf("|  %03d  | %10s %10s | %9.2f | %15s | %02d /  %3s  / %4d | %6d | %13.2f | %06.2f | %15.2f | %5d  |\n",
-                    ejem[j].orden, ejem[j].nombre, ejem[j].apellido, ejem[j].importe, ejem[j].tipo_credito,
-                    ejem[j].dia, ejem[j].mes, ejem[j].anio, ejem[j].numero_cuotas, ejem[j].importe_cuota,
-                    ejem[j].iva, ejem[j].total_cuota, ejem[j].activo);
+                if (strcasecmp(ejem[j].tipo_credito, "a sola firma") == 0)
+                {
+
+                    printf("|  %03d  | %10s %10s | %9.2f | %15s | %02d /  %3s  / %4d | %6d | %13.2f | %06.2f | %15.2f | %5d  |\n",
+                           ejem[j].orden, ejem[j].nombre, ejem[j].apellido, ejem[j].importe, ejem[j].tipo_credito,
+                           ejem[j].dia, ejem[j].mes, ejem[j].anio, ejem[j].numero_cuotas, ejem[j].importe_cuota,
+                           ejem[j].iva, ejem[j].total_cuota, ejem[j].activo);
+                }
             }
+
             break;
+
         case 2:
 
-            printf("****************************************************************************************************************************************************\n");
+            printf("***************************************************************************************************************************************************\n");
             printf("| Orden |        Cliente        |  Importe  | Tipo de credito | Dia/  Mes  / Anio | Cuotas | Importe Cuota |  IVA   |   Total Cuota   | activo |\n");
-            printf("****************************************************************************************************************************************************\n");
+            printf("***************************************************************************************************************************************************\n");
 
-            for (int j = 0; j < max_num_clientes; j++) {
+            for (int j = 0; j < max_num_clientes; j++)
+            {
+                if (strcasecmp(ejem[j].tipo_credito, "con garantia") == 0)
+                {
 
-                if (ejem[j].activo == 1) {
                     printf("|  %03d  | %10s %10s | %9.2f | %15s | %02d /  %3s  / %4d | %6d | %13.2f | %06.2f | %15.2f | %5d  |\n",
-                        ejem[j].orden, ejem[j].nombre, ejem[j].apellido, ejem[j].importe, ejem[j].tipo_credito,
-                        ejem[j].dia, ejem[j].mes, ejem[j].anio, ejem[j].numero_cuotas, ejem[j].importe_cuota,
-                        ejem[j].iva, ejem[j].total_cuota, ejem[j].activo);
+                           ejem[j].orden, ejem[j].nombre, ejem[j].apellido, ejem[j].importe, ejem[j].tipo_credito,
+                           ejem[j].dia, ejem[j].mes, ejem[j].anio, ejem[j].numero_cuotas, ejem[j].importe_cuota,
+                           ejem[j].iva, ejem[j].total_cuota, ejem[j].activo);
                 }
             }
-            break;
-        case 3:
-            printf("Seleccione el tipo de credito por el que quiere filtrar: \n");
-            printf("1 para mostrar clientes A Solo Firma: \n");
-            printf("2 para mostrar clientes Con Garantia: \n");
-            printf("Opcion: ");
 
-            validar_ingreso_entero(&opcion);
+            break;
+        }
+        break;
+
+    case 4:
+
+        do
+        {
+            printf("Ingrese el rango de tiempo (solo numeros enteros):\n");
             printf("\n");
 
-                switch (opcion) {
+            printf("Dia minimo: ");
+            validar_ingreso_entero(&min_dia);
+            printf("Mes minimo: ");
+            validar_ingreso_entero(&min_mes);
+            printf("Anio minimo: ");
+            validar_ingreso_entero(&min_anio);
 
-                    case 1:
+            printf("\n");
 
-                        printf("****************************************************************************************************************************************************\n");
-                        printf("| Orden |        Cliente        |  Importe  | Tipo de credito | Dia/  Mes  / Anio | Cuotas | Importe Cuota |  IVA   |   Total Cuota   | activo |\n");
-                        printf("****************************************************************************************************************************************************\n");
+            printf("Dia maximo: ");
+            validar_ingreso_entero(&max_dia);
+            printf("Mes maximo: ");
+            validar_ingreso_entero(&max_mes);
+            printf("Anio maximo: ");
+            validar_ingreso_entero(&max_anio);
 
-                        for (int j = 0; j < max_num_clientes; j++) {
+        } while (validar_fecha(min_dia, min_mes, min_anio) || validar_fecha(max_dia, max_mes, max_anio));
 
-                            if (strcasecmp(ejem[j].tipo_credito, "a sola firma") == 0){
+        printf("Listando registros por rango de tiempo dado:\n");
+        printf("****************************************************************************************************************************************************\n");
+        printf("| Orden |        Cliente        |  Importe  | Tipo de credito | Dia/  Mes  / Anio | Cuotas | Importe Cuota |  IVA   |   Total Cuota   | activo |\n");
+        printf("****************************************************************************************************************************************************\n");
 
-                                printf("|  %03d  | %10s %10s | %9.2f | %15s | %02d /  %3s  / %4d | %6d | %13.2f | %06.2f | %15.2f | %5d  |\n",
-                                    ejem[j].orden, ejem[j].nombre, ejem[j].apellido, ejem[j].importe, ejem[j].tipo_credito,
-                                    ejem[j].dia, ejem[j].mes, ejem[j].anio, ejem[j].numero_cuotas, ejem[j].importe_cuota,
-                                    ejem[j].iva, ejem[j].total_cuota, ejem[j].activo);
-                            }
-                        }
+        for (int j = 0; j < max_num_clientes; j++)
+        {
 
-                        break;
+            if (ejem[j].dia >= min_dia && ejem[j].dia <= max_dia &&
+                (mes = numero_mes(ejem[j].mes)) >= min_mes && (mes = numero_mes(ejem[j].mes)) <= max_mes &&
+                ejem[j].anio >= min_anio && ejem[j].anio <= max_anio)
+            {
 
-                    case 2:
-
-                        printf("***************************************************************************************************************************************************\n");
-                        printf("| Orden |        Cliente        |  Importe  | Tipo de credito | Dia/  Mes  / Anio | Cuotas | Importe Cuota |  IVA   |   Total Cuota   | activo |\n");
-                        printf("***************************************************************************************************************************************************\n");
-
-                        for (int j = 0; j < max_num_clientes; j++) {
-                            if (strcasecmp(ejem[j].tipo_credito, "con garantia") == 0) {
-
-                                printf("|  %03d  | %10s %10s | %9.2f | %15s | %02d /  %3s  / %4d | %6d | %13.2f | %06.2f | %15.2f | %5d  |\n",
-                                    ejem[j].orden, ejem[j].nombre, ejem[j].apellido, ejem[j].importe, ejem[j].tipo_credito,
-                                    ejem[j].dia, ejem[j].mes, ejem[j].anio, ejem[j].numero_cuotas, ejem[j].importe_cuota,
-                                    ejem[j].iva, ejem[j].total_cuota, ejem[j].activo);
-                            }
-                        }
-
-                        break;
-                }
-            break;
-
-        case 4:
-
-            do {
-                printf("Ingrese el rango de tiempo (solo numeros enteros):\n");
-                printf("\n");
-
-                printf("Dia minimo: ");
-                validar_ingreso_entero(&min_dia);
-                printf("Mes minimo: ");
-                validar_ingreso_entero(&min_mes);
-                printf("Anio minimo: ");
-                validar_ingreso_entero(&min_anio);
-
-                printf("\n");
-
-                printf("Dia maximo: ");
-                validar_ingreso_entero(&max_dia);
-                printf("Mes maximo: ");
-                validar_ingreso_entero(&max_mes);
-                printf("Anio maximo: ");
-                validar_ingreso_entero(&max_anio);
-
-            } while (validar_fecha(min_dia, min_mes, min_anio) || validar_fecha(max_dia, max_mes, max_anio));
-
-            printf("Listando registros por rango de tiempo dado:\n");
-            printf("****************************************************************************************************************************************************\n");
-            printf("| Orden |        Cliente        |  Importe  | Tipo de credito | Dia/  Mes  / Anio | Cuotas | Importe Cuota |  IVA   |   Total Cuota   | activo |\n");
-            printf("****************************************************************************************************************************************************\n");
-
-            for (int j = 0; j < max_num_clientes; j++) {
-
-                if (ejem[j].dia >= min_dia && ejem[j].dia <= max_dia &&
-                    (mes = numero_mes(ejem[j].mes)) >= min_mes && (mes = numero_mes(ejem[j].mes)) <= max_mes &&
-                    ejem[j].anio >= min_anio && ejem[j].anio <= max_anio) {
-
-                        printf("|  %03d  | %10s %10s | %9.2f | %15s | %02d /  %3s  / %4d | %6d | %13.2f | %06.2f | %15.2f | %5d  |\n",
-                            ejem[j].orden, ejem[j].nombre, ejem[j].apellido, ejem[j].importe, ejem[j].tipo_credito,
-                            ejem[j].dia, ejem[j].mes, ejem[j].anio, ejem[j].numero_cuotas, ejem[j].importe_cuota,
-                            ejem[j].iva, ejem[j].total_cuota, ejem[j].activo);
-                }
+                printf("|  %03d  | %10s %10s | %9.2f | %15s | %02d /  %3s  / %4d | %6d | %13.2f | %06.2f | %15.2f | %5d  |\n",
+                       ejem[j].orden, ejem[j].nombre, ejem[j].apellido, ejem[j].importe, ejem[j].tipo_credito,
+                       ejem[j].dia, ejem[j].mes, ejem[j].anio, ejem[j].numero_cuotas, ejem[j].importe_cuota,
+                       ejem[j].iva, ejem[j].total_cuota, ejem[j].activo);
             }
-            break;
-        default:
-            printf("Opcion invalida.\n");
-            listar_datos();
-            break;
+        }
+        break;
+    default:
+        printf("Opcion invalida.\n");
+        listar_datos();
+        break;
     }
 }
 
 // Opcion 5 del menu:
 // Crea un nuevo cliente y lo guarda en el archivo binario.
 
-void alta_clientes() {
+void alta_clientes()
+{
 
     struct clientes datos;
     struct clientes viejos[max_num_clientes];
     int numero_orden, numero, dia, mes, anio;
-    char nombre_mes [4] = "CAS";
+    char nombre_mes[4] = "CAS";
 
-    FILE* archivo_binario = fopen("creditos.dat", "r");
-    if (archivo_binario == NULL) {
+    FILE *archivo_binario = fopen("creditos.dat", "r");
+    if (archivo_binario == NULL)
+    {
         controlar_error("No se pudo abrir el archivo.");
         perror("fopen");
         return;
@@ -641,17 +706,21 @@ void alta_clientes() {
 
     copiar_datos_binario(archivo_binario, viejos);
 
-    fclose (archivo_binario);
+    fclose(archivo_binario);
 
-    do {
+    do
+    {
         // Solicitar ingreso del n�mero de orden
         printf("Ingrese el numero de orden: ");
         validar_ingreso_entero(&numero_orden);
 
-        if (viejos[numero_orden - 1].orden == numero_orden) {
+        if (viejos[numero_orden - 1].orden == numero_orden)
+        {
             controlar_error("El numero de orden ingresado ya existe en el archivo.");
             printf("\n");
-        } else {
+        }
+        else
+        {
             datos.orden = numero_orden;
         }
     } while (datos.orden == 0);
@@ -669,7 +738,8 @@ void alta_clientes() {
     datos.apellido[strcspn(datos.apellido, "\n")] = '\0'; // Eliminar el car�cter de nueva l�nea
 
     // Convertir el apellido a may�sculas
-    for (int i = 0; datos.apellido[i] != '\0'; i++) {
+    for (int i = 0; datos.apellido[i] != '\0'; i++)
+    {
         datos.apellido[i] = toupper(datos.apellido[i]);
     }
 
@@ -685,7 +755,8 @@ void alta_clientes() {
     datos.numero_cuotas = numero;
 
     int finaliza;
-    do {
+    do
+    {
         int opcion;
 
         printf("\n");
@@ -695,22 +766,24 @@ void alta_clientes() {
         fflush(stdin);
 
         validar_ingreso_entero(&opcion);
-        switch (opcion) {
-            case 1:
-                strcpy(datos.tipo_credito, "A Sola Firma");
-                finaliza = 1;
-                break;
-            case 2:
-                strcpy(datos.tipo_credito, "Con Garantia");
-                finaliza = 1;
-                break;
-            default:
-                finaliza = 0;
-                break;
+        switch (opcion)
+        {
+        case 1:
+            strcpy(datos.tipo_credito, "A Sola Firma");
+            finaliza = 1;
+            break;
+        case 2:
+            strcpy(datos.tipo_credito, "Con Garantia");
+            finaliza = 1;
+            break;
+        default:
+            finaliza = 0;
+            break;
         }
     } while (finaliza == 0);
 
-    do {
+    do
+    {
         printf("\n");
         printf("Ingrese el rango de tiempo (solo numeros enteros):\n");
         printf("\n");
@@ -724,7 +797,7 @@ void alta_clientes() {
 
     } while (validar_fecha(dia, mes, anio));
 
-    cambio_formato_mes (mes, nombre_mes);
+    cambio_formato_mes(mes, nombre_mes);
 
     datos.dia = dia;
     strcpy(datos.mes, nombre_mes);
@@ -753,8 +826,9 @@ void alta_clientes() {
     viejos[numero_orden - 1].total_cuota = datos.total_cuota;
     viejos[numero_orden - 1].activo = datos.activo;
 
-    FILE* archivo_binario_2 = fopen("creditos.dat", "wb");
-    if (archivo_binario == NULL) {
+    FILE *archivo_binario_2 = fopen("creditos.dat", "wb");
+    if (archivo_binario == NULL)
+    {
         controlar_error("No se pudo abrir el archivo.");
         perror("fopen");
         return;
@@ -773,24 +847,27 @@ void alta_clientes() {
 // busca clientes en creditos.dat de acuerdo a los parametros elejidos y devuelve el valor del orden del
 //      ultimo cliente encontrado, en caso de que al buscar por apellido aparezca mas de 1 cliente.
 
-int buscar_clientes () {
+int buscar_clientes()
+{
 
-    struct clientes ejem [max_num_clientes];
-    char apellido [max_apellido];
+    struct clientes ejem[max_num_clientes];
+    char apellido[max_apellido];
     int orden, opcion, encontrado_orden;
 
-    FILE* archivo_binario = fopen("creditos.dat", "r");
-    if (archivo_binario == NULL) {
+    FILE *archivo_binario = fopen("creditos.dat", "r");
+    if (archivo_binario == NULL)
+    {
         controlar_error("No se pudo abrir el archivo.");
         perror("fopen");
-        return;
+        return -1;
     }
 
     copiar_datos_binario(archivo_binario, ejem);
 
     fclose(archivo_binario);
 
-    do {
+    do
+    {
 
         printf("Seleccione la forma de buscar clientes: \n");
         printf("1 para buscar cliente por numero de orden: \n");
@@ -800,90 +877,98 @@ int buscar_clientes () {
         validar_ingreso_entero(&opcion);
         printf("\n");
 
-            switch (opcion) {
+        switch (opcion)
+        {
 
-                case 1:
+        case 1:
 
-                    printf ("Ingrese el numero de orden que quiere buscar: \n");
-                    validar_ingreso_entero(&orden);
+            printf("Ingrese el numero de orden que quiere buscar: \n");
+            validar_ingreso_entero(&orden);
 
-                    if (ejem[orden - 1].orden == orden && ejem[orden - 1].orden != 0) {
+            if (ejem[orden - 1].orden == orden && ejem[orden - 1].orden != 0)
+            {
 
-                        printf("****************************************************************************************************************************************************\n");
-                        printf("| Orden |        Cliente        |  Importe  | Tipo de credito | Dia/  Mes  / Anio | Cuotas | Importe Cuota |  IVA   |   Total Cuota   | activo |\n");
-                        printf("****************************************************************************************************************************************************\n");
+                printf("****************************************************************************************************************************************************\n");
+                printf("| Orden |        Cliente        |  Importe  | Tipo de credito | Dia/  Mes  / Anio | Cuotas | Importe Cuota |  IVA   |   Total Cuota   | activo |\n");
+                printf("****************************************************************************************************************************************************\n");
 
-                        printf("|  %03d  | %10s %10s | %9.2f | %15s | %02d /  %3s  / %4d | %6d | %13.2f | %06.2f | %15.2f | %5d  |\n",
-                                ejem[orden-1].orden, ejem[orden - 1].nombre, ejem[orden - 1].apellido, ejem[orden - 1].importe,
-                                ejem[orden - 1].tipo_credito, ejem[orden - 1].dia, ejem[orden - 1].mes, ejem[orden - 1].anio,
-                                ejem[orden - 1].numero_cuotas, ejem[orden - 1].importe_cuota, ejem[orden - 1].iva,
-                                ejem[orden - 1].total_cuota, ejem[orden - 1].activo);
+                printf("|  %03d  | %10s %10s | %9.2f | %15s | %02d /  %3s  / %4d | %6d | %13.2f | %06.2f | %15.2f | %5d  |\n",
+                       ejem[orden - 1].orden, ejem[orden - 1].nombre, ejem[orden - 1].apellido, ejem[orden - 1].importe,
+                       ejem[orden - 1].tipo_credito, ejem[orden - 1].dia, ejem[orden - 1].mes, ejem[orden - 1].anio,
+                       ejem[orden - 1].numero_cuotas, ejem[orden - 1].importe_cuota, ejem[orden - 1].iva,
+                       ejem[orden - 1].total_cuota, ejem[orden - 1].activo);
 
-                        return ejem[orden - 1].orden;
+                return ejem[orden - 1].orden;
 
-                        break;
-
-                    }
-
-                    controlar_error ("El numero de orden ingresado no es valido o no forma parte del registro. \n");
-                    break;
-
-                case 2:
-
-                    printf("Ingrese el apellido que desea buscar: \n");
-                    fgets(apellido, sizeof(apellido), stdin);
-                    apellido[strcspn(apellido, "\n")] = '\0';
-
-                    // Convertir apellido a may�sculas
-                    for (int i = 0; apellido[i] != '\0'; i++) {
-                        apellido[i] = toupper(apellido[i]);
-                    }
-
-                    bool encontrado = false;
-
-                    for (int i = 0; i < max_num_clientes; i++) {
-
-                        if (strcasecmp(ejem[i].apellido, apellido) == 0) {
-
-                            printf("***************************************************************************************************************************************************\n");
-                            printf("| Orden |        Cliente        |  Importe  | Tipo de credito | Dia/  Mes  / Anio | Cuotas | Importe Cuota |  IVA   |   Total Cuota   | activo |\n");
-                            printf("***************************************************************************************************************************************************\n");
-
-                            printf("|  %03d  | %10s %10s | %9.2f | %15s | %02d /  %3s  / %4d | %6d | %13.2f | %06.2f | %15.2f | %5d  |\n",
-                                ejem[i].orden, ejem[i].nombre, ejem[i].apellido, ejem[i].importe,
-                                ejem[i].tipo_credito, ejem[i].dia, ejem[i].mes, ejem[i].anio,
-                                ejem[i].numero_cuotas, ejem[i].importe_cuota, ejem[i].iva,
-                                ejem[i].total_cuota, ejem[i].activo);
-
-                            encontrado = true;
-                            encontrado_orden = ejem[i].orden;
-                        }
-                    }
-
-                    if (encontrado) {
-                        return encontrado_orden;
-                    } else {
-                        controlar_error("No se encontraron clientes con el apellido especificado.\n");
-                    }
-
+                break;
             }
-    }while (1);
+
+            controlar_error("El numero de orden ingresado no es valido o no forma parte del registro. \n");
+            break;
+
+        case 2:
+
+            printf("Ingrese el apellido que desea buscar: \n");
+            fgets(apellido, sizeof(apellido), stdin);
+            apellido[strcspn(apellido, "\n")] = '\0';
+
+            // Convertir apellido a may�sculas
+            for (int i = 0; apellido[i] != '\0'; i++)
+            {
+                apellido[i] = toupper(apellido[i]);
+            }
+
+            bool encontrado = false;
+
+            for (int i = 0; i < max_num_clientes; i++)
+            {
+
+                if (strcasecmp(ejem[i].apellido, apellido) == 0)
+                {
+
+                    printf("***************************************************************************************************************************************************\n");
+                    printf("| Orden |        Cliente        |  Importe  | Tipo de credito | Dia/  Mes  / Anio | Cuotas | Importe Cuota |  IVA   |   Total Cuota   | activo |\n");
+                    printf("***************************************************************************************************************************************************\n");
+
+                    printf("|  %03d  | %10s %10s | %9.2f | %15s | %02d /  %3s  / %4d | %6d | %13.2f | %06.2f | %15.2f | %5d  |\n",
+                           ejem[i].orden, ejem[i].nombre, ejem[i].apellido, ejem[i].importe,
+                           ejem[i].tipo_credito, ejem[i].dia, ejem[i].mes, ejem[i].anio,
+                           ejem[i].numero_cuotas, ejem[i].importe_cuota, ejem[i].iva,
+                           ejem[i].total_cuota, ejem[i].activo);
+
+                    encontrado = true;
+                    encontrado_orden = ejem[i].orden;
+                }
+            }
+
+            if (encontrado)
+            {
+                return encontrado_orden;
+            }
+            else
+            {
+                controlar_error("No se encontraron clientes con el apellido especificado.\n");
+            }
+        }
+    } while (1);
 }
 
 // Opcion 7 del menu:
 // Llama a la funcion buscar clientes para encontrar el numero de orden del cliente que desea modificar.
 // Una vez cargados los datos cambiados se guarda el archivo y se finaliza el proceso.
 
-void modificar_datos() {
+void modificar_datos()
+{
 
-    struct clientes ejem [max_num_clientes];
-    char credito [20];
-    char opcion [5];
+    struct clientes ejem[max_num_clientes];
+    char credito[20];
+    char opcion[5];
     int orden = 0;
     float importe;
 
-    FILE* archivo_binario = fopen("creditos.dat", "r+b");
-    if (archivo_binario == NULL) {
+    FILE *archivo_binario = fopen("creditos.dat", "r+b");
+    if (archivo_binario == NULL)
+    {
         controlar_error("No se pudo abrir el archivo.");
         perror("fopen");
         return;
@@ -892,7 +977,7 @@ void modificar_datos() {
     copiar_datos_binario(archivo_binario, ejem);
 
     printf("Buscando cliente a modificar: \n");
-    orden = buscar_clientes () - 1;
+    orden = buscar_clientes() - 1;
 
     printf("\n");
     printf("ingrese el nuevo importe a cargar: \n");
@@ -900,7 +985,8 @@ void modificar_datos() {
 
     importe = validar_ingreso_float();
 
-    do {
+    do
+    {
 
         printf("Esta seguro que desea cambiar el valor del importe de: %s %s, cuyo numero de orden es: %d\n \n",
                ejem[orden].nombre, ejem[orden].apellido, ejem[orden].orden);
@@ -909,49 +995,56 @@ void modificar_datos() {
         fgets(opcion, sizeof(opcion), stdin);
 
         if (strcmp(opcion, "s\n") == 0 || strcmp(opcion, "si\n") == 0 ||
-            strcmp(opcion, "S\n") == 0 || strcmp(opcion, "SI\n") == 0) {
+            strcmp(opcion, "S\n") == 0 || strcmp(opcion, "SI\n") == 0)
+        {
 
             ejem[orden].importe = importe;
             break;
-
-        } else if (strcmp(opcion, "n\n") == 0 || strcmp(opcion, "no\n") == 0 ||
-                   strcmp(opcion, "N\n") == 0 || strcmp(opcion, "NO\n") == 0) {
+        }
+        else if (strcmp(opcion, "n\n") == 0 || strcmp(opcion, "no\n") == 0 ||
+                 strcmp(opcion, "N\n") == 0 || strcmp(opcion, "NO\n") == 0)
+        {
 
             controlar_error("Se cancelo el cambio de importe.\n");
             break;
-
-        } else {
+        }
+        else
+        {
             controlar_error("Opcion invalida.\n");
         }
     } while (1);
 
     if (strcmp(opcion, "s\n") == 0 || strcmp(opcion, "si\n") == 0 ||
-        strcmp(opcion, "S\n") == 0 || strcmp(opcion, "SI\n") == 0) {
+        strcmp(opcion, "S\n") == 0 || strcmp(opcion, "SI\n") == 0)
+    {
 
-        do {
+        do
+        {
 
             printf("ingrese el tipo de credito que desea guardar: \n");
             printf("(A sola firma o Con garantia. Solo estas opciones funcionan)\n");
             fgets(credito, sizeof(credito), stdin);
 
             // Convertir a may�sculas
-            for (int i = 0; credito[i] != '\0'; i++) {
+            for (int i = 0; credito[i] != '\0'; i++)
+            {
                 credito[i] = toupper(credito[i]);
             }
 
-            if (strcmp(credito, "A SOLA FIRMA\n") == 0) {
+            if (strcmp(credito, "A SOLA FIRMA\n") == 0)
+            {
 
                 strcpy(ejem[orden].tipo_credito, "A SOLA FIRMA");
                 break;
-
-            } else if (strcmp(credito, "CON GARANTIA\n") == 0) {
+            }
+            else if (strcmp(credito, "CON GARANTIA\n") == 0)
+            {
 
                 strcpy(ejem[orden].tipo_credito, "CON GARANTIA");
                 break;
-
             }
 
-            controlar_error ("Ingreso alguna letra incorrecta. \n");
+            controlar_error("Ingreso alguna letra incorrecta. \n");
 
         } while (1);
 
@@ -964,25 +1057,26 @@ void modificar_datos() {
         printf("El registro se ha dado de alta correctamente.\n");
     }
 
-    controlar_error ("Debido a que se cancelo el cambio de importe,"
-                     " se cancela el resto de la operacion");
-
+    controlar_error("Debido a que se cancelo el cambio de importe,"
+                    " se cancela el resto de la operacion");
 }
 
 // Opcion 8 del menu:
 // Llama a la funcion buscar clientes para obtener el numero de ordel del cliente a dar de baja.
 // Despues de obtener el valor del orden del cliente, confirma si desea darlo de baja o no.
 
-void baja_logica() {
+void baja_logica()
+{
 
-    struct clientes ejem [max_num_clientes];
-    char credito [20];
-    char opcion [5];
+    struct clientes ejem[max_num_clientes];
+    char credito[20];
+    char opcion[5];
     int orden;
     float importe;
 
-    FILE* archivo_binario = fopen("creditos.dat", "r+b");
-    if (archivo_binario == NULL) {
+    FILE *archivo_binario = fopen("creditos.dat", "r+b");
+    if (archivo_binario == NULL)
+    {
         controlar_error("No se pudo abrir el archivo.");
         perror("fopen");
         return;
@@ -991,9 +1085,10 @@ void baja_logica() {
     copiar_datos_binario(archivo_binario, ejem);
 
     printf("Buscando cliente a modificar: \n");
-    orden = buscar_clientes () - 1;
+    orden = buscar_clientes() - 1;
 
-    do {
+    do
+    {
 
         printf("Esta seguro que desea dar de baja a: %s %s, cuyo numero de orden es: %d?\n \n",
                ejem[orden].nombre, ejem[orden].apellido, ejem[orden].orden);
@@ -1002,44 +1097,48 @@ void baja_logica() {
         fgets(opcion, sizeof(opcion), stdin);
 
         if (strcmp(opcion, "s\n") == 0 || strcmp(opcion, "si\n") == 0 ||
-            strcmp(opcion, "S\n") == 0 || strcmp(opcion, "SI\n") == 0) {
+            strcmp(opcion, "S\n") == 0 || strcmp(opcion, "SI\n") == 0)
+        {
 
             ejem[orden].activo = 0;
 
-                printf("****************************************************************************************************************************************************\n");
-                printf("| Orden |        Cliente        |  Importe  | Tipo de credito | Dia/  Mes  / Anio | Cuotas | Importe Cuota |  IVA   |   Total Cuota   | activo |\n");
-                printf("****************************************************************************************************************************************************\n");
+            printf("****************************************************************************************************************************************************\n");
+            printf("| Orden |        Cliente        |  Importe  | Tipo de credito | Dia/  Mes  / Anio | Cuotas | Importe Cuota |  IVA   |   Total Cuota   | activo |\n");
+            printf("****************************************************************************************************************************************************\n");
 
-                for (int j = 0; j < max_num_clientes; j++) {
+            for (int j = 0; j < max_num_clientes; j++)
+            {
 
-                    if (ejem[j].activo == 1) {
-                        printf("|  %03d  | %10s %10s | %9.2f | %15s | %02d /  %3s  / %4d | %6d | %13.2f | %06.2f | %15.2f | %5d  |\n",
-                            ejem[j].orden, ejem[j].nombre, ejem[j].apellido, ejem[j].importe, ejem[j].tipo_credito,
-                            ejem[j].dia, ejem[j].mes, ejem[j].anio, ejem[j].numero_cuotas, ejem[j].importe_cuota,
-                            ejem[j].iva, ejem[j].total_cuota, ejem[j].activo);
-                    }
+                if (ejem[j].activo == 1)
+                {
+                    printf("|  %03d  | %10s %10s | %9.2f | %15s | %02d /  %3s  / %4d | %6d | %13.2f | %06.2f | %15.2f | %5d  |\n",
+                           ejem[j].orden, ejem[j].nombre, ejem[j].apellido, ejem[j].importe, ejem[j].tipo_credito,
+                           ejem[j].dia, ejem[j].mes, ejem[j].anio, ejem[j].numero_cuotas, ejem[j].importe_cuota,
+                           ejem[j].iva, ejem[j].total_cuota, ejem[j].activo);
                 }
+            }
             // Escribir los datos actualizados en el archivo binario
             fseek(archivo_binario, 0, SEEK_SET);
             fwrite(ejem, sizeof(struct clientes), max_num_clientes, archivo_binario);
 
             printf("El registro se ha dado de alta correctamente.\n");
-        break;
-
-        } else if (strcmp(opcion, "n\n") == 0 || strcmp(opcion, "no\n") == 0 ||
-                   strcmp(opcion, "N\n") == 0 || strcmp(opcion, "NO\n") == 0) {
+            break;
+        }
+        else if (strcmp(opcion, "n\n") == 0 || strcmp(opcion, "no\n") == 0 ||
+                 strcmp(opcion, "N\n") == 0 || strcmp(opcion, "NO\n") == 0)
+        {
 
             controlar_error("Se cancelo la baja logica de: ");
-            printf ("%s %s, cuyo numero de orden es: %d \n", ejem[orden].nombre, ejem[orden].apellido, ejem[orden].orden);
+            printf("%s %s, cuyo numero de orden es: %d \n", ejem[orden].nombre, ejem[orden].apellido, ejem[orden].orden);
             break;
-
-        } else {
+        }
+        else
+        {
             controlar_error("Opcion invalida.\n");
         }
     } while (1);
 
     fclose(archivo_binario);
-
 }
 
 // opcion 9 del menu:
@@ -1047,15 +1146,16 @@ void baja_logica() {
 //      dado que abre el archivo creditos.dat y verifica si hay clientes con numero de orden
 //      que tienen el campo activo en 0;
 
-void baja_fisica() {
+void baja_fisica()
+{
 
-    struct clientes ejem [max_num_clientes];
-    struct clientes bajas [max_num_clientes];
+    struct clientes ejem[max_num_clientes];
+    struct clientes bajas[max_num_clientes];
     time_t tiempo_actual;
-    struct tm* tiempo_descompuesto;
+    struct tm *tiempo_descompuesto;
 
-    FILE* archivo_bajas;
-    char nombre_bajas_archivo [max_num_clientes];
+    FILE *archivo_bajas;
+    char nombre_bajas_archivo[max_num_clientes];
 
     // Obtener la fecha actual del sistema
     tiempo_actual = time(NULL);
@@ -1067,14 +1167,16 @@ void baja_fisica() {
     // Abrir el archivo de bajas en modo escritura
     archivo_bajas = fopen(nombre_bajas_archivo, "w");
 
-    if (archivo_bajas == NULL) {
+    if (archivo_bajas == NULL)
+    {
         controlar_error("No se pudo crear el archivo de bajas.");
         perror("fopen");
         return;
     }
 
-    FILE* archivo_binario = fopen("creditos.dat", "r+b");
-    if (archivo_binario == NULL) {
+    FILE *archivo_binario = fopen("creditos.dat", "r+b");
+    if (archivo_binario == NULL)
+    {
         controlar_error("No se pudo abrir el archivo.");
         perror("fopen");
         fclose(archivo_bajas);
@@ -1085,13 +1187,15 @@ void baja_fisica() {
 
     int j = 0;
 
-    for (int i = 0; i < max_num_clientes; i++) {
-        if (ejem[i].orden != 0 && ejem[i].activo == 0) {  // Cliente inactivo
+    for (int i = 0; i < max_num_clientes; i++)
+    {
+        if (ejem[i].orden != 0 && ejem[i].activo == 0)
+        { // Cliente inactivo
 
             bajas[j] = ejem[i];
 
-    // Una vez que copio los clientes con '0' en el campo activo de mi archivo
-    //     Creditos.dat vuelvo 0 a todos los campos ultilizados por ese cliente.
+            // Una vez que copio los clientes con '0' en el campo activo de mi archivo
+            //     Creditos.dat vuelvo 0 a todos los campos ultilizados por ese cliente.
             ejem[i].orden = 0;
             ejem[i].nombre[0] = '\0';
             ejem[i].apellido[0] = '\0';
@@ -1122,18 +1226,19 @@ void baja_fisica() {
     printf("Se han guardado los clientes inactivos correctamente en el archivo creado.\n");
 }
 
-//opcion 10 del menu:
+// opcion 10 del menu:
 //
 
-void listar() {
+void listar()
+{
 
-    struct clientes ejem [max_num_clientes];
-    FILE* archivo_bajas;
+    struct clientes ejem[max_num_clientes];
+    FILE *archivo_bajas;
     char nombre_bajas_archivo[max_num_clientes];
 
     // Obtener la fecha actual del sistema
     time_t tiempo_actual = time(NULL);
-    struct tm* tiempo_descompuesto = localtime(&tiempo_actual);
+    struct tm *tiempo_descompuesto = localtime(&tiempo_actual);
 
     // Construir el nombre del archivo de bajas
     strftime(nombre_bajas_archivo, sizeof(nombre_bajas_archivo), "clientes_bajas_%Y%m%d.xyz", tiempo_descompuesto);
@@ -1141,7 +1246,8 @@ void listar() {
     // Abrir el archivo de bajas en modo lectura
     archivo_bajas = fopen(nombre_bajas_archivo, "r");
 
-    if (archivo_bajas == NULL) {
+    if (archivo_bajas == NULL)
+    {
         controlar_error("No se pudo abrir el archivo de bajas.");
         perror("fopen");
         return;
@@ -1154,7 +1260,8 @@ void listar() {
     printf("****************************************************************************************************************************************\n");
 
     // Leer y mostrar cada registro del archivo
-    for (size_t j = 0; j < num_registros_leidos; j++) {
+    for (size_t j = 0; j < num_registros_leidos; j++)
+    {
 
         printf("|  %03d  | %10s %10s | %9.2f | %15s | %02d /  %3s  / %4d | %6d | %13.2f | %06.2f | %15.2f |\n",
                ejem[j].orden, ejem[j].nombre, ejem[j].apellido, ejem[j].importe, ejem[j].tipo_credito,
@@ -1166,13 +1273,15 @@ void listar() {
     fclose(archivo_bajas);
 }
 
-//Menu de opciones.
+// Menu de opciones.
 
-void desplegar_menu (){
+void desplegar_menu()
+{
 
     int opcion, orden;
 
-    do {
+    do
+    {
         printf("\n==================  Menu de opciones  ==================\n");
         printf("0. Salir\n");
         printf("1. Listar archivo prestamos.csv\n");
@@ -1190,55 +1299,63 @@ void desplegar_menu (){
         fflush(stdin);
         validar_ingreso_entero(&opcion);
 
-        switch (opcion) {
-            case 0:
-                printf("Finalizando progama.\n");
-                break;
-            case 1:
-                printf("\n");
-                listar_clientes();
-                break;
-            case 2:
-                crear_binario();
-                break;
-            case 3:
-                printf("\n");
-                migrar_datos();
-                break;
-            case 4:
-                printf("\n");
-                listar_datos();
-                break;
-            case 5:
-                printf("\n");
-                alta_clientes();
-                break;
-            case 6:
-                printf("\n");
-                orden = buscar_clientes();
-                break;
-            case 7:
-                printf("\n");
-                modificar_datos();
-                break;
-            case 8:
-                printf("\n");
-                baja_logica();
-                break;
-            case 9:
-                printf("\n");
-                baja_fisica();
-                break;
-            case 10:
-                printf("\n");
-                listar();
-                break;
-            default:
-                printf("\n");
-                printf("Numero fuera del rango, ingrese un numero entre 0 y 10.\n");
-                break;
+        switch (opcion)
+        {
+        case 0:
+            printf("Finalizando progama.\n");
+            break;
+        case 1:
+            printf("\n");
+            listar_clientes();
+            break;
+        case 2:
+            crear_binario();
+            break;
+        case 3:
+            printf("\n");
+            migrar_datos();
+            break;
+        case 4:
+            printf("\n");
+            listar_datos();
+            break;
+        case 5:
+            printf("\n");
+            alta_clientes();
+            break;
+        case 6:
+            printf("\n");
+            orden = buscar_clientes();
+            break;
+        case 7:
+            printf("\n");
+            modificar_datos();
+            break;
+        case 8:
+            printf("\n");
+            baja_logica();
+            break;
+        case 9:
+            printf("\n");
+            baja_fisica();
+            break;
+        case 10:
+            printf("\n");
+            listar();
+            break;
+        default:
+            printf("\n");
+            printf("Numero fuera del rango, ingrese un numero entre 0 y 10.\n");
+            break;
         }
     } while (opcion != 0);
 
     return;
+}
+
+int main()
+{
+    desplegar_menu();
+
+    return 0;
 }

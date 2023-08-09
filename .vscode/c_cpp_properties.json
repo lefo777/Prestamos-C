@@ -1,0 +1,15 @@
+{
+    "configurations": [
+        {
+            "intelliSenseMode": "linux-gcc-x64",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c17",
+            "cppStandard": "gnu++14",
+            "includePath": [
+                "${workspaceFolder}/src/",
+                "${workspaceFolder}/**"
+            ]
+        }
+    ],
+    "version": 4
+}
